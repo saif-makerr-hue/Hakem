@@ -1,7 +1,11 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.kotlin.serialization)
+
 }
 
 android {
@@ -9,13 +13,10 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.presentation"
         minSdk = 24
-        targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -27,6 +28,9 @@ android {
             )
         }
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.7.5"
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -34,26 +38,45 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    buildFeatures {
-        compose = true
-    }
 }
 
 dependencies {
+    // Modules
+    implementation(project(":core"))
+    implementation(project(":data"))
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
+    // Jetpack Compose BOM
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Compose UI
+    implementation(libs.androidx.compose.ui.ui)
+
+    // Foundational components - ADD MISSING LAYOUT
+    implementation(libs.androidx.compose.foundation.foundation)
+    implementation(libs.androidx.foundation.layout)
+
+    // Material Design 3
+    implementation(libs.androidx.compose.material3.material3)
+    implementation(libs.androidx.material.icons.extended)
+
+    // Android Studio Preview support
+    implementation(libs.androidx.compose.ui.ui.tooling.preview)
+    debugImplementation(libs.ui.tooling)
+
+    // Integration with activities
+    implementation(libs.androidx.activity.compose)
+    // Integration with ViewModels
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    // Coil
+    implementation(libs.coil.compose)
+
+    //Navigation
+    implementation(libs.androidx.compose.navigation)
 }

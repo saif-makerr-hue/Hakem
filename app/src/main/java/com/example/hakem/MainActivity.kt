@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.example.hakem.presentation.components.NavHostPatient
 import com.example.hakem.ui.theme.HakemTheme
 import dagger.hilt.android.AndroidEntryPoint
+import  com.example.presentation.components.NavHostPatient
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
