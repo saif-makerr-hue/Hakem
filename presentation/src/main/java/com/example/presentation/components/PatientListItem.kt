@@ -37,7 +37,7 @@ fun PatientCard(
     Row(modifier = modifier.fillMaxWidth()) {
         Image(
             painter = painter,
-            contentDescription = null,
+            contentDescription = stringResource(R.string.profile_image),
             modifier = Modifier
                 .size(100.dp)
                 .clip(CircleShape)
