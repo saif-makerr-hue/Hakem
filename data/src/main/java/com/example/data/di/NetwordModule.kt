@@ -7,6 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import jakarta.inject.Singleton
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import com.example.data.datasource.api.PatientService
 
 
 @Module
@@ -27,9 +28,8 @@ object NetworkModule  {
 //Use @Bind
     @Singleton
     @Provides
-    fun providePatientService(retrofit: Retrofit): com.example.data.datasource.api.PatientService
-    {
-        return retrofit.create(com.example.data.datasource.api.PatientService::class.java)
+    fun providePatientService(retrofit: Retrofit): PatientService {
+        return retrofit.create(PatientService::class.java)
     }
 }
 

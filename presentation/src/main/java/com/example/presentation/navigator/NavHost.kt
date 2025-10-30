@@ -1,4 +1,4 @@
-package com.example.presentation.components
+package com.example.presentation.navigator
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -7,10 +7,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.presentation.screens.HomePatientScreen
 import com.example.presentation.screens.UpdatePatientScreen
-import kotlinx.serialization.Serializable
 
 @Composable
-fun NavHostPatient(navController: NavHostController, modifier: Modifier = Modifier) {
+fun NavHostPatient(
+    modifier: Modifier = Modifier,
+    navController: NavHostController,
+) {
     NavHost(
         navController = navController,
         startDestination = Home,
@@ -28,9 +30,3 @@ fun NavHostPatient(navController: NavHostController, modifier: Modifier = Modifi
         }
     }
 }
-
-@Serializable
-object Home
-
-@Serializable
-data class UpdatePatient(val id: String)

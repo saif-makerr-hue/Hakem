@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("kotlin-kapt")
+    alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.android)
 
 }
@@ -51,12 +52,16 @@ android {
 }
 
 dependencies {
-    // Modules
+
+    // Project Modules
     implementation(project(":presentation"))
 
+     // AndroidX Core & Lifecycle
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+
+     // Jetpack Compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
@@ -64,22 +69,16 @@ dependencies {
     implementation(libs.androidx.material3)
     debugImplementation(libs.androidx.ui.tooling)
 
+     // Identity / Authentication
     implementation(libs.identity.jvm)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
 
 
 
-    implementation("androidx.compose.runtime:runtime")
-
-
-    // Hilt
+     // Dependency Injection (Hilt)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
 
-    //Navigation
+     // Navigation
     implementation(libs.androidx.compose.navigation)
+    implementation(libs.androidx.hilt.navigation.compose)
 }

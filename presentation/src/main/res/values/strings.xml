@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hakem">Hakem</string>
+    <string name="retry">Retry</string>
+    <string name="delete">Delete</string>
+    <string name="comments">Comments : %1$s</string>
+    <string name="id">Id : %1$s</string>
+    <string name="first_name">First Name : %1$s</string>
+    <string name="last_name">Last Name : %1$s</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="dob">Dob: %1$s</string>
+</resources>

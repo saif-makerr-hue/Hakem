@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.core.state.PatientUiState
-import com.example.data.datasource.repository_imp.PatientRepositoryImp
+import com.example.data.datasource.repository.PatientRepositoryImp
 import com.example.domain.model.PatientsItem
-import com.example.presentation.components.UpdatePatient
+import com.example.presentation.navigator.UpdatePatient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,11 +27,10 @@ class UpdateViewModel @Inject constructor(
 
 
     private val args = savedStateHandle.toRoute<UpdatePatient>()
-    private val patientID = args.id
 
     init {
-        if (patientID.isNotEmpty()) {
-            getPatientInfoById(patientID)
+        if (args.id.isNotEmpty()) {
+            getPatientInfoById(args.id)
         } else {
             _patientState.update { PatientUiState.Success(PatientsItem()) }
         }
@@ -68,6 +67,7 @@ class UpdateViewModel @Inject constructor(
                 is PatientUiState.Success -> {
                     PatientUiState.Success(change(current.data))
                 }
+
                 else -> current
             }
         }
@@ -88,6 +88,7 @@ class UpdateViewModel @Inject constructor(
     fun onChangeDob(dob: Long) {
         changePatientInfo { it.copy(dob = dob) }
     }
+
     fun onChangeAvatar(avatar: String) {
         changePatientInfo { it.copy(avatar = avatar) }
     }
@@ -95,8 +96,8 @@ class UpdateViewModel @Inject constructor(
 
     fun savePatientInformation() {
         val current = (_patientState.value as? PatientUiState.Success)?.data ?: return
-        if (patientID.isNotEmpty()) {
-            updatePatientInfo(current, patientID)
+        if (args.id.isNotEmpty()) {
+            updatePatientInfo(current, args.id)
         } else {
             addPatientInfo(current)
         }

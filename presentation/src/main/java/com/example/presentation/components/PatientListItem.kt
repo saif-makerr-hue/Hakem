@@ -6,10 +6,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -21,15 +21,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.presentation.R
 
 @Composable
-fun PatientCard(
+fun PatientListItem(
     modifier: Modifier = Modifier,
     firstName: String,
     lastName: String,
     id: String,
     comments: String,
+    Dob:String,
     painter: Painter,
     onClick: () -> Unit,
     onDelete: () -> Unit
@@ -41,28 +46,47 @@ fun PatientCard(
             modifier = Modifier
                 .size(100.dp)
                 .clip(CircleShape)
-                .aspectRatio(1f)
                 .border(1.5.dp, MaterialTheme.colorScheme.secondary, CircleShape),
             alignment = Alignment.Center
         )
-        SpaceWidth(8.dp)
+        Spacer(modifier = modifier.width(8.dp))
         Column(
             modifier = Modifier
                 .weight(1f)
                 .clickable { onClick() }) {
-            InfoText("First Name : $firstName", style = MaterialTheme.typography.titleSmall)
+            InfoTag(
+                text = stringResource(R.string.first_name, firstName),
+                style = MaterialTheme.typography.titleSmall
+            )
             Spacer(modifier = Modifier.height(4.dp))
-            SurfaceText("Last Name : $lastName")
-            SurfaceText("Comments : $comments")
-            SurfaceText("Id : $id")
+            InfoTag(
+                text = stringResource(R.string.last_name, lastName),
+            )
+            InfoTag(text = stringResource(R.string.comments, comments))
+            InfoTag(text = stringResource(R.string.dob, Dob) )
+            InfoTag(text = stringResource(R.string.id, id))
         }
-        SpaceWidth(16.dp)
+        Spacer(modifier = modifier.width(16.dp))
         IconButton(onClick = onDelete) {
             Icon(
                 imageVector = Icons.Default.Delete,
-                contentDescription = "Delete"
+                contentDescription = stringResource(R.string.delete)
             )
         }
-
     }
+}
+
+@Preview
+@Composable
+fun PreviewPatientListItem() {
+    PatientListItem(
+        firstName = "FirstName",
+        lastName = "LastName",
+        id = "Id",
+        comments = "Comments",
+        Dob = "dob",
+        painter = painterResource(R.drawable.place_holder),
+        onClick = {},
+        onDelete = {}
+    )
 }

@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -36,18 +37,18 @@ android {
 
 dependencies {
 
+    // Project Modules
     api(project(":domain"))
+
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
-    //Gson
-    implementation(libs.gson)
-
     // Coroutines
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
-    // Hilt
+
+    // Dependency Injection (Hilt)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 }

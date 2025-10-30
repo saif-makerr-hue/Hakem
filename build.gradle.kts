@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.compose) apply false
     alias(libs.plugins.android.library) apply false
-    id("com.google.dagger.hilt.android") version "2.57.2" apply false
-    alias(libs.plugins.kotlin.serialization) version "1.9.0" apply false
+    alias(libs.plugins.hilt.android) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.ksp) apply false
 }

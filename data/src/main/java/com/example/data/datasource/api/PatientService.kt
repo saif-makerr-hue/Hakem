@@ -26,5 +26,5 @@ interface PatientService {
     suspend fun deletePatientInfo(@Path("id") id: String)
 }
 
-const val API_GET="api/v1/Patient"
-const val API_GET_ID = "api/v1/Patient/{id}"
+private const val API_GET="api/v1/Patient"
+private const val API_GET_ID = "api/v1/Patient/{id}"

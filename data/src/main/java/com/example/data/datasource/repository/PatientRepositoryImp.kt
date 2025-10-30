@@ -1,4 +1,4 @@
-package com.example.data.datasource.repository_imp
+package com.example.data.datasource.repository
 
 import com.example.data.datasource.api.PatientService
 import com.example.domain.model.PatientsItem

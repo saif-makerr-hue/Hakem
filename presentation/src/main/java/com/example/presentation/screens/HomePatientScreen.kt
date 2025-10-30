@@ -3,23 +3,19 @@ package com.example.presentation.screens
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -28,61 +24,45 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.core.state.PatientUiState
 import com.example.domain.model.PatientsItem
+import com.example.presentation.components.ErrorScreen
+import com.example.presentation.components.LoadingScreen
+import com.example.presentation.components.PatientListItem
 import com.example.presentation.viewModels.PatientViewModel
 
 @Composable
 fun HomePatientScreen(
-    modifier: Modifier = Modifier,
     viewModel: PatientViewModel = hiltViewModel(),
     onClickToAdd: () -> Unit,
     onClickToUpdate: (String) -> Unit
 ) {
-    val uiStateList by viewModel.patientStateList.collectAsState()
+    val state by viewModel.patientStateList.collectAsState()
 
-    when (uiStateList) {
+    when (val uiStateList = state) {
         is PatientUiState.Error -> {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Error : ${(uiStateList as? PatientUiState.Error)?.message}",
-                    modifier = Modifier.padding(16.dp)
-                )
-                Button(onClick = { viewModel.getPatientInfoList() }) {
-                    Text("Retry")
-                }
-            }
+            ErrorScreen(
+                onClick = { viewModel.getPatientInfoList() },
+                errorText = "Error : ${(uiStateList as? PatientUiState.Error)?.message}"
+            )
         }
 
         PatientUiState.Loading -> {
-            Column(
-                modifier = modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
-            ) {
-
-                CircularProgressIndicator(
-                    modifier = Modifier.size(40.dp),
-                    color = MaterialTheme.colorScheme.primaryContainer
-                )
-            }
+            LoadingScreen()
         }
 
         is PatientUiState.Success -> {
             HomePatientContent(
-                patientList = (uiStateList as PatientUiState.Success<List<PatientsItem>>).data,
+                patientList = uiStateList .data,
                 onRefresh = { viewModel.getPatientInfoList() },
                 isRefreshing = false,
                 onClickToAdd = onClickToAdd,
                 onClickToUpdate = onClickToUpdate,
-                onDelete = viewModel::deletePatient
+                onDelete = viewModel::deletePatient,
             )
         }
     }
@@ -90,12 +70,13 @@ fun HomePatientScreen(
 
 @Composable
 fun HomePatientContent(
+    modifier: Modifier = Modifier,
     patientList: List<PatientsItem>,
     onRefresh: () -> Unit,
     isRefreshing: Boolean,
     onClickToAdd: () -> Unit,
     onClickToUpdate: (String) -> Unit,
-    onDelete: (String) -> Unit
+    onDelete: (String) -> Unit,
 ) {
     val pullToRefreshState = rememberPullToRefreshState()
     PullToRefreshBox(
@@ -113,7 +94,7 @@ fun HomePatientContent(
         },
         content = {
             Box(
-                modifier = Modifier.fillMaxSize()
+                modifier = modifier.fillMaxSize()
             ) {
                 AnimatedVisibility(visible = patientList.isEmpty()) {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -126,12 +107,13 @@ fun HomePatientContent(
                     verticalArrangement = Arrangement.spacedBy(4.dp),
                     content = {
                         items(patientList) {
-                            com.example.presentation.components.PatientCard(
+                            PatientListItem(
                                 modifier = Modifier.padding(4.dp),
                                 firstName = it.firstName,
                                 lastName = it.lastName,
                                 id = it.id,
                                 comments = it.comments,
+                                Dob = it.dob.toString(),
                                 painter = rememberAsyncImagePainter(model = it.avatar),
                                 onClick = { onClickToUpdate(it.id) },
                                 onDelete = { onDelete(it.id) }
@@ -151,5 +133,28 @@ fun HomePatientContent(
                 }
             }
         }
+    )
+}
+
+@Preview
+@Composable
+fun PreviewHomePatientContent() {
+    val samplePatients = List(3) { index ->
+        PatientsItem(
+            id = "P$index",
+            firstName = "John",
+            lastName = "Doe $index",
+            comments = "Sample patient record $index",
+            dob = 19900L + index,
+            avatar = ""
+        )
+    }
+    HomePatientContent(
+        patientList = samplePatients,
+        onRefresh = {},
+        isRefreshing = false,
+        onClickToAdd = {},
+        onClickToUpdate = {},
+        onDelete = {}
     )
 }

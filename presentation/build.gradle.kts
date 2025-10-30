@@ -3,7 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.serialization)
 
 }
@@ -41,7 +42,7 @@ android {
 }
 
 dependencies {
-    // Modules
+    // Project Modules
     implementation(project(":core"))
     implementation(project(":data"))
 
@@ -69,7 +70,7 @@ dependencies {
     // Integration with ViewModels
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
-    // Hilt
+    // Dependency Injection (Hilt)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)

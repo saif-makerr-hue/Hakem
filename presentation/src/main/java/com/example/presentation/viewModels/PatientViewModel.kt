@@ -4,7 +4,7 @@ package com.example.presentation.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.core.state.PatientUiState
-import com.example.data.datasource.repository_imp.PatientRepositoryImp
+import com.example.data.datasource.repository.PatientRepositoryImp
 import com.example.domain.model.PatientsItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +24,7 @@ class PatientViewModel @Inject constructor(
     init {
         getPatientInfoList()
     }
+
     fun getPatientInfoList() {
         viewModelScope.launch {
             try {
@@ -40,14 +41,20 @@ class PatientViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                repository.deletePatientInfo(id = id)
-                getPatientInfoList()
+                launch {
+                    repository.deletePatientInfo(id = id)
+                }
+                launch {
+                    getPatientInfoList()
+                }
+
             } catch (e: Exception) {
                 _patientStateList.update { PatientUiState.Error(e.message.toString()) }
             }
 
         }
     }
+
 }
 typealias PatientsStateList = PatientUiState<List<PatientsItem>>
 
